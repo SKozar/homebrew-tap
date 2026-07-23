@@ -8,11 +8,11 @@ class Keepalive < Formula
   depends_on "keepalive-cli"
 
   def install
-    prefix.install "Keepalive.app"
+    system "cp", "-R", "Keepalive.app", prefix.to_s
   end
 
   def post_install
-    system "ln", "-sf", prefix/"Keepalive.app", "/Applications/Keepalive.app"
+    system "ln", "-sf", "#{prefix}/Keepalive.app", "/Applications/Keepalive.app"
   end
 
   def caveats
@@ -28,5 +28,9 @@ class Keepalive < Formula
         System Settings → Privacy & Security → Accessibility
         Add: /opt/homebrew/bin/keepalive-cli
     EOS
+  end
+
+  test do
+    system "test", "-d", prefix/"Keepalive.app"
   end
 end
