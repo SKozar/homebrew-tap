@@ -1,9 +1,9 @@
 class KeepaliveUi < Formula
   desc "Menu bar controller for the keepalive activity agent"
   homepage "https://github.com/skozar/keepalive"
-  version "0.5.0"
-  url "https://github.com/skozar/keepalive/releases/download/v0.5.0/KeepaliveUI-0.5.0.zip"
-  sha256 "bf140fbeccfdde74885f4dd198ddd4a944f4c660d630fe0a9fc5f01465980d31"
+  version "0.5.1"
+  url "https://github.com/skozar/keepalive/releases/download/v0.5.1/KeepaliveUI-0.5.1.zip"
+  sha256 "754313113bc3eea3d8b55660dfd2074bfc698d52f708da4ffdbc1c2ed7dc676e"
   license "MIT"
 
   depends_on "keepalive"
@@ -13,15 +13,19 @@ class KeepaliveUi < Formula
   end
 
   def post_install
-    target = Pathname("/Applications/Keepalive.app")
-    target.unlink if target.exist? || target.symlink?
-    FileUtils.ln_sf prefix/"Keepalive.app", target
+    app_source = prefix/"Keepalive.app"
+    app_target = Pathname("/Applications/Keepalive.app")
+    app_target.delete if app_target.exist? || app_target.symlink?
+    app_target.make_symlink(app_source)
   end
 
   def caveats
     <<~EOS
       Keepalive.app has been symlinked to /Applications/Keepalive.app.
       Launch it from Spotlight or Launchpad.
+
+      Settings are stored in ~/.config/keepalive/settings.json
+      and survive reinstalls — you only need to configure once.
 
       IMPORTANT: The keepalive CLI binary must have Accessibility
       permission for mouse jiggle to work:
